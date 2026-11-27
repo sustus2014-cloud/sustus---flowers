@@ -7,6 +7,7 @@
 <meta name="theme-color" content="#ec4899">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="פרחים">
+<link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="logo.jpg">
 <link rel="icon" href="logo.jpg">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -35,37 +36,4 @@ input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px soli
 .reportBtn{width:100%;background:#25D366;color:#fff;border:0;padding:14px;border-radius:10px;font-weight:800;margin-top:8px;font-size:16px}
 </style></head>
 <body>
-<div class="h"><div style="display:flex;gap:10px;align-items:center"><img src="logo.jpg"><div><div class="big">Sus-Tus <span class="pink">🌸 פרחים</span><br>חלוקת סחורה</div><small>סוס-טוס | גיא - 052-8671331</small></div></div><div style="text-align:left"><b>🌸 חריש</b><br><a href="tel:+972528671331" style="color:#111;font-weight:800">📞 052-8671331</a></div></div>
-
-<div id="installBar" class="installBar"><span>📱 <b>התקן כאפליקציה</b> - אייקון על המסך</span><button id="installBtn">התקן</button></div>
-
-<div id="t1" class="tab on">
-<div class="topstats"><div class="stat"><b id="sTotal">0</b><small>סה"כ</small></div><div class="stat"><b id="sDone" style="color:#25D366">0</b><small>נמסרו ✅</small></div><div class="stat"><b id="sLeft">0</b><small>נשארו</small></div></div>
-<div class="prog"><div id="progBar" style="width:0%"></div></div>
-<button onclick="openWaze()" class="nextBtn">🚗 נווט לסחורה הבאה - Waze</button>
-<h3 style="padding:0 16px">🗺️ מפה</h3>
-<div class="mapSwitch"><button id="btnRoad" class="on" onclick="setMapType('road')">🗺️ מפה</button><button id="btnSat" onclick="setMapType('sat')">🛰️ לוויין</button><button id="btnHybrid" onclick="setMapType('hybrid')">🛰️ לוויין + רחובות</button></div>
-<div id="map"></div>
-<div id="fixHint" style="padding:0 16px;font-weight:800;color:#d32f2f;text-align:center"></div>
-<h3 style="padding:0 16px">🌸 סחורה היום</h3><div id="stopsList"></div>
-</div>
-
-<div id="t2" class="tab"><h3 style="padding:0 16px">➕ הוספה מהירה</h3><div class="card"><b>הוסף חלוקת סחורה</b><input id="oneName" placeholder="שם"><input id="oneAddr" placeholder="כתובת - לדוגמה: ספיר 22 חריש"><input id="onePhone" placeholder="טלפון - לדוגמה: 0507283502"><select id="oneFlower"><option>סחורת פרחים 🌹</option><option>זר פרחים 🌹</option><option>זר ורדים 🌹</option><option>עציץ 🪴</option><option>סידור פרחים 💐</option><option>זר כלה 👰</option><option>אחר</option></select><button onclick="addSingle()" style="width:100%;background:#ec4899;color:#fff;border:0;padding:12px;border-radius:10px;font-weight:800;margin-top:8px">+ הוסף</button></div><div class="card"><b>הדבק רשימה</b><textarea id="bulkText" rows="5" placeholder="שרה כהן | ספיר 22 חריש | 0507283502"></textarea><button onclick="bulkAdd()" style="width:100%;background:#111;color:#fff;border:0;padding:14px;border-radius:10px;font-weight:800;margin-top:8px">🌸 הוסף את כל הרשימה</button></div><div style="padding:0 16px"><button onclick="clearDay()" style="width:100%;background:#ffe6e6;border:0;padding:12px;border-radius:10px">🗑 נקה יום</button></div></div>
-
-<div id="t3" class="tab"><h3 style="padding:0 16px">💰 כסף</h3>
-<div class="moneyBox"><small>💰 היום - <span id="todayDate"></span></small><br><b id="moneyToday">0₪</b><br><small id="moneyTodayDetail"></small></div>
-<div class="moneyBox"><small>📅 החודש - <span id="monthName"></span></small><br><b id="moneyMonth">0₪</b><br><small id="moneyMonthDetail"></small></div>
-<div class="card"><b>מחיר לסחורה / הזמנה:</b><input id="pricePer" type="number" value="150" onchange="savePrice();render()"><br><small>המחיר נשמר אוטומטית</small><br><br><b>כמה נמסרו היום?</b><br><small>זה מחושב לבד מהכרטיסים שסימנת ✅</small></div>
-<div style="padding:0 16px"><button class="reportBtn" onclick="sendDailyReport()">📊 דו"ח סיכום יומי להגשה</button><button class="reportBtn" style="background:#111" onclick="sendMonthlyReport()">📅 דו"ח סיכום חודשי להגשה</button><button class="reportBtn" style="background:#ec4899" onclick="copyDailyReport()">📋 העתק דו"ח יומי</button></div>
-<div class="card"><b>📜 היסטוריה</b><div id="historyList" style="font-size:14px"></div></div>
-</div>
-
-<div id="t4" class="tab"><h3 style="padding:0 16px">✅ הוכחות</h3><div class="card">📸 צילום הוכחת מסירה <input type="file" accept="image/*"></div></div>
-
-<div id="t5" class="tab"><h3 style="padding:0 16px">⚙️ הגדרות</h3><div class="card"><b>💬 הודעת וואטסאפ שלך</b><textarea id="msgTemplate" rows="3" onchange="saveMsg()">היי {שם} 🌸 סוס-טוס בדרך אליך עם הסחורה! מגיע בעוד כ-20 דקות. גיא - 052-8671331</textarea><small>{שם} יוחלף בשם הלקוח. נשמר לבד.</small></div><div class="card"><b>🛠️ תיקונים</b><br><br><button onclick="fixPhones()" style="width:100%;background:#25D366;color:#fff;border:0;padding:12px;border-radius:10px;font-weight:800;margin-top:6px">📞 תקן את כל המספרים</button><button onclick="spreadInHarish()" style="width:100%;background:#111;color:#fff;border:0;padding:12px;border-radius:10px;font-weight:800;margin-top:8px">↔️ פזר נקודות על חריש</button></div></div>
-
-<div class="nav"><div class="on" onclick="go(1,this)">קו היום</div><div onclick="go(2,this)">הוסף</div><div onclick="go(3,this)">💰 כסף</div><div onclick="go(4,this)">הוכחות</div><div onclick="go(5,this)">⚙️ הגדרות</div></div>
-
-<script>
-(function(){
-  var manifest={name:"סוס-טוס פרחים",short_name:"פרחים",description:"חלוקת סחורת פרחים - גיא - חריש",start_url:".",display:"standalone",background_color:"#fdf2f8",theme_color:"#ec4899",orientation:"portrait",lang:"he",dir:"rtl",icons:[{src:"logo.jpg",sizes:"512x512",type:"image/jpeg",purpose:"any maskable"},{src:"logo.jpg",sizes
+<div class="h"><div style="display:flex;gap:10px;align-items:center"><img src="logo.jpg"><div><div class="big">Sus-Tus <span class="pink">🌸 פרחים</span><br>חלוקת סחורה</div><small>סוס-טוס | גיא - 052-8671331</small></div></div><div style="text-align:left"><b>🌸 ח
