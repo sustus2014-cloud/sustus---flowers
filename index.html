@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>סוסטוס פרחים 🌸</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#fff5f7;color:#222}
+header{background:#e91e63;color:#fff;padding:14px;text-align:center;font-size:22px;font-weight:800}
+.tabs{display:flex;background:#fff;border-bottom:1px solid #eee}
+.tabs button{flex:1;padding:12px;border:0;background:#fff;font-size:16px;font-weight:700;cursor:pointer}
+.tabs button.active{color:#e91e63;border-bottom:3px solid #e91e63}
+#map{height:52vh;width:100%}
+.card{margin:10px;background:#fff;border:1px solid #eee;border-radius:14px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+input,select,textarea{width:100%;padding:11px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:16px}
+.btn{background:#e91e63;color:#fff;border:0;padding:12px;border-radius:10px;width:100%;font-size:17px;font-weight:800;cursor:pointer}
+.btn2{background:#25D366}
+.item{border-bottom:1px solid #eee;padding:10px 0}
+.item b{font-size:17px}.small{color:#777;font-size:13px}
+.pill{display:inline-block;background:#fce4ec;color:#c2185b;padding:3px 8px;border-radius:20px;font-size:12px;font-weight:700}
+.done{opacity:.6;text-decoration:line-through}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.topbar{display:flex;gap:8px;padding:10px}
+.topbar button{flex:1;padding:10px;border-radius:10px;border:1px solid #ddd;background:#fff;font-weight:700}
+</style>
+</head>
+<body>
+<header>🌸 סוסטוס פרחים - חלוקה</header>
+<div class="tabs">
+<button id="tMap" class="active" onclick="show('mapView','tMap')">🗺️ מפה</button>
+<button id="tList" onclick="show('listView','tList')">📋 רשימה</button>
+<button id="tAdd" onclick="show('addView','tAdd')">➕ הוסף פרחים</button>
+</div>
+
+<div id="mapView">
+<div class="topbar">
+<button onclick="locate()">📍 המיקום שלי</button>
+<button onclick="fitAll()">🔎 הצג הכל</button>
+<button onclick="clearDone()">🧹 נקה מה שנמסר</button>
+</div>
+<div id="map"></div>
+<div class="card"><b id="stat">טוען...</b><div class="small" id="stat2"></div></div>
+</div>
+
+<div id="listView" style="display:none"><div id="list" class="card"></div></div>
+
+<div id="addView" style="display:none">
+<div class="card">
+<h3 style="margin:0">הוסף הזמנת פרחים חדשה</h3>
+<input id="name" placeholder="שם לקוח *">
+<input id="phone" placeholder="טלפון" inputmode="tel">
+<input id="address" placeholder="כתובת * לדוגמא: הרצל 12 חריש">
+<select id="type">
+<option>💐 זר פרחים</option><option>🌹 זר ורדים</option><option>🌷 זר טוליפים</option><option>🌻 חמניות</option><option>🪴 עציץ</option><option>💐 סידור פרחים</option>
+</select>
+<input id="price" placeholder="מחיר ₪" inputmode="decimal">
+<textarea id="note" placeholder="ברכה / הערה לשליח..."></textarea>
+<button class="btn" onclick="addItem()">➕ הוסף לרשימה + למפה</button>
+<div class="small" style="margin-top:8px">הכתובת תהפוך אוטומטית לנקודה על המפה.</div>
+</div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+let map=L.map('map').setView([32.47,34.99],13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
+let items=JSON.parse(localStorage.getItem('sustus_flowers')||'[]');
+let markers={};
+function show(id,btn){['mapView','listView','addView'].forEach(x=>document.getElementById(x).style.display='none');document.getElementById(id).style.display='block';['tMap','tList','tAdd'].forEach(b=>document.getElementById(b).classList.remove('active'));document.getElementById(btn).classList.add('active');if(id=='mapView')setTimeout(()=>map.invalidateSize(),200);render();}
+async function geocode(q){let r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q),{headers:{'Accept':'application/json'}});let j=await r.json();return j[0]?[parseFloat(j[0].lat),parseFloat(j[0].lon)]:null;}
+async function addItem(){
+let name=document.getElementById('name').value.trim(),addr=document.getElementById('address').value.trim();
+if(!name||!addr){alert('חסר שם או כתובת');return;}
+let coords=await geocode(addr+', ישראל');
+if(!coords){alert('לא מצאתי את הכתובת, נסה עם עיר');return;}
+items.push({id:Date.now(),name,phone:document.getElementById('phone').value,type:document.getElementById('type').value,price:document.getElementById('price').value,note:document.getElementById('note').value,addr,lat:coords[0],lng:coords[1],done:false});
+save();['name','phone','address','price','note'].forEach(i=>document.getElementById(i).value='');show('mapView','tMap');fitAll();}
+function save(){localStorage.setItem('sustus_flowers',JSON.stringify(items));render();}
+function render(){
+Object.values(markers).forEach(m=>map.removeLayer(m));markers={};
+let active=items.filter(i=>!i.done);
+document.getElementById('stat').innerText=`🌸 ${active.length} משלוחי פרחים פעילים | ${items.length} סה"כ`;
+document.getElementById('stat2').innerText=active.length?`לחץ על נקודה במפה לניווט / סימון כנמסר`:`אין משלוחים פעילים - הוסף חדש למעלה`;
+let html=items.length?'':'<div>אין עדיין הזמנות פרחים. הוסף את הראשונה!</div>';
+items.slice().reverse().forEach(it=>{
+let nav=`https://www.google.com/maps/dir/?api=1&destination=${it.lat},${it.lng}`;
+html+=`<div class="item ${it.done?'done':''}"><b>${it.type} - ${it.name}</b> <span class="pill">${it.done?'נמסר ✅':'ממתין'}</span><br><div class="small">${it.addr} ${it.price?'| '+it.price+' ₪':''} ${it.phone?'| '+it.phone:''}</div>${it.note?`<div>${it.note}</div>`:''}<div class="row" style="margin-top:8px"><a href="${nav}" target="_blank" style="flex:1;text-align:center;background:#4285F4;color:#fff;padding:9px;border-radius:9px;text-decoration:none;font-weight:700">🧭 ניווט</a>${it.phone?`<a href="tel:${it.phone}" style="flex:1;text-align:center;background:#eee;padding:9px;border-radius:9px;text-decoration:none;color:#000;font-weight:700">📞 חיוג</a>`:''}<button onclick="toggle(${it.id})" style="flex:1;padding:9px;border-radius:9px;border:0;font-weight:700;background:${it.done?'#ffe0b2':'#c8e6c9'}">${it.done?'↩ בטל':'✅ נמסר'}</button><button onclick="del(${it.id})" style="padding:9px 12px;border-radius:9px;border:0;background:#ffebee">🗑️</button></div></div>`;
+let m=L.marker([it.lat,it.lng]).addTo(map).bindPopup(`<b>${it.type}</b><br>${it.name}<br>${it.addr}<br><a href="https://www.google.com/maps/dir/?api=1&destination=${it.lat},${it.lng}" target="_blank">🧭 ניווט</a>`);markers[it.id]=m;});
+document.getElementById('list').innerHTML=html;}
+function toggle(id){let it=items.find(x=>x.id==id);if(it)it.done=!it.done;save();}
+function del(id){if(confirm('למחוק?')){items=items.filter(x=>x.id!=id);save();}}
+function clearDone(){items=items.filter(x=>!x.done);save();}
+function locate(){map.locate({setView:true,maxZoom:16});}
+function fitAll(){if(!items.length)return;let b=L.latLngBounds(items.map(i=>[i.lat,i.lng]));map.fitBounds(b.pad(.2));}
+map.on('locationfound',e=>{L.marker(e.latlng).addTo(map).bindPopup('אתה פה 📍').openPopup();});
+render();
+if(!items.length){items=[{id:1,name:'דוגמא - שרה כהן',phone:'050-0000000',type:'💐 זר פרחים',price:'150',note:'להגיע עד 12:00, לכתוב ברכה: מזל טוב!',addr:'חריש',lat:32.4705,lng:34.9889,done:false}];save();}
+</script>
+</body>
+</html>
