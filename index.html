@@ -35,119 +35,37 @@ input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px soli
 .reportBtn{width:100%;background:#25D366;color:#fff;border:0;padding:14px;border-radius:10px;font-weight:800;margin-top:8px;font-size:16px}
 </style></head>
 <body>
-<div class="h"><div style="display:flex;gap:10px;align-items:center"><img src="logo.jpg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/12518/12518170.png'"><div><div class="big">Sus-Tus <span class="pink">🌸 פרחים</span><br>חלוקת פרחים</div><small>סוס-טוס | גיא - 052-8671331</small></div></div><div style="text-align:left"><b>🌸 חריש</b><br><a href="tel:+972528671331" style="color:#111;font-weight:800">📞 052-8671331</a></div></div>
+<div class="h"><div style="display:flex;gap:10px;align-items:center"><img src="logo.jpg"><div><div class="big">Sus-Tus <span class="pink">🌸 פרחים</span><br>חלוקת סחורה</div><small>סוס-טוס | גיא - 052-8671331</small></div></div><div style="text-align:left"><b>🌸 חריש</b><br><a href="tel:+972528671331" style="color:#111;font-weight:800">📞 052-8671331</a></div></div>
 
 <div id="installBar" class="installBar"><span>📱 <b>התקן כאפליקציה</b> - אייקון על המסך</span><button id="installBtn">התקן</button></div>
 
 <div id="t1" class="tab on">
 <div class="topstats"><div class="stat"><b id="sTotal">0</b><small>סה"כ</small></div><div class="stat"><b id="sDone" style="color:#25D366">0</b><small>נמסרו ✅</small></div><div class="stat"><b id="sLeft">0</b><small>נשארו</small></div></div>
 <div class="prog"><div id="progBar" style="width:0%"></div></div>
-<button onclick="openWaze()" class="nextBtn">🚗 נווט לפרחים הבאים - Waze</button>
+<button onclick="openWaze()" class="nextBtn">🚗 נווט לסחורה הבאה - Waze</button>
 <h3 style="padding:0 16px">🗺️ מפה</h3>
 <div class="mapSwitch"><button id="btnRoad" class="on" onclick="setMapType('road')">🗺️ מפה</button><button id="btnSat" onclick="setMapType('sat')">🛰️ לוויין</button><button id="btnHybrid" onclick="setMapType('hybrid')">🛰️ לוויין + רחובות</button></div>
 <div id="map"></div>
 <div id="fixHint" style="padding:0 16px;font-weight:800;color:#d32f2f;text-align:center"></div>
-<h3 style="padding:0 16px">🌸 פרחים היום</h3><div id="stopsList"></div>
+<h3 style="padding:0 16px">🌸 סחורה היום</h3><div id="stopsList"></div>
 </div>
 
-<div id="t2" class="tab"><h3 style="padding:0 16px">➕ הוספה מהירה</h3><div class="card"><b>הוסף הזמנת פרחים</b><input id="oneName" placeholder="שם"><input id="oneAddr" placeholder="כתובת - לדוגמה: ספיר 22 חריש"><input id="onePhone" placeholder="טלפון - לדוגמה: 0507283502"><select id="oneFlower"><option>זר פרחים 🌹</option><option>זר ורדים 🌹</option><option>עציץ 🪴</option><option>סידור פרחים 💐</option><option>זר כלה 👰</option><option>אחר</option></select><button onclick="addSingle()" style="width:100%;background:#ec4899;color:#fff;border:0;padding:12px;border-radius:10px;font-weight:800;margin-top:8px">+ הוסף</button></div><div class="card"><b>הדבק רשימה</b><textarea id="bulkText" rows="5" placeholder="שרה כהן | ספיר 22 חריש | 0507283502"></textarea><button onclick="bulkAdd()" style="width:100%;background:#111;color:#fff;border:0;padding:14px;border-radius:10px;font-weight:800;margin-top:8px">🌸 הוסף את כל הרשימה</button></div><div style="padding:0 16px"><button onclick="clearDay()" style="width:100%;background:#ffe6e6;border:0;padding:12px;border-radius:10px">🗑 נקה יום</button></div></div>
+<div id="t2" class="tab"><h3 style="padding:0 16px">➕ הוספה מהירה</h3><div class="card"><b>הוסף חלוקת סחורה</b><input id="oneName" placeholder="שם"><input id="oneAddr" placeholder="כתובת - לדוגמה: ספיר 22 חריש"><input id="onePhone" placeholder="טלפון - לדוגמה: 0507283502"><select id="oneFlower"><option>סחורת פרחים 🌹</option><option>זר פרחים 🌹</option><option>זר ורדים 🌹</option><option>עציץ 🪴</option><option>סידור פרחים 💐</option><option>זר כלה 👰</option><option>אחר</option></select><button onclick="addSingle()" style="width:100%;background:#ec4899;color:#fff;border:0;padding:12px;border-radius:10px;font-weight:800;margin-top:8px">+ הוסף</button></div><div class="card"><b>הדבק רשימה</b><textarea id="bulkText" rows="5" placeholder="שרה כהן | ספיר 22 חריש | 0507283502"></textarea><button onclick="bulkAdd()" style="width:100%;background:#111;color:#fff;border:0;padding:14px;border-radius:10px;font-weight:800;margin-top:8px">🌸 הוסף את כל הרשימה</button></div><div style="padding:0 16px"><button onclick="clearDay()" style="width:100%;background:#ffe6e6;border:0;padding:12px;border-radius:10px">🗑 נקה יום</button></div></div>
 
 <div id="t3" class="tab"><h3 style="padding:0 16px">💰 כסף</h3>
 <div class="moneyBox"><small>💰 היום - <span id="todayDate"></span></small><br><b id="moneyToday">0₪</b><br><small id="moneyTodayDetail"></small></div>
 <div class="moneyBox"><small>📅 החודש - <span id="monthName"></span></small><br><b id="moneyMonth">0₪</b><br><small id="moneyMonthDetail"></small></div>
-<div class="card"><b>מחיר לזר / הזמנה:</b><input id="pricePer" type="number" value="150" onchange="savePrice();render()"><br><small>המחיר נשמר אוטומטית</small><br><br><b>כמה נמסרו היום?</b><br><small>זה מחושב לבד מהכרטיסים שסימנת ✅</small></div>
+<div class="card"><b>מחיר לסחורה / הזמנה:</b><input id="pricePer" type="number" value="150" onchange="savePrice();render()"><br><small>המחיר נשמר אוטומטית</small><br><br><b>כמה נמסרו היום?</b><br><small>זה מחושב לבד מהכרטיסים שסימנת ✅</small></div>
 <div style="padding:0 16px"><button class="reportBtn" onclick="sendDailyReport()">📊 דו"ח סיכום יומי להגשה</button><button class="reportBtn" style="background:#111" onclick="sendMonthlyReport()">📅 דו"ח סיכום חודשי להגשה</button><button class="reportBtn" style="background:#ec4899" onclick="copyDailyReport()">📋 העתק דו"ח יומי</button></div>
 <div class="card"><b>📜 היסטוריה</b><div id="historyList" style="font-size:14px"></div></div>
 </div>
 
 <div id="t4" class="tab"><h3 style="padding:0 16px">✅ הוכחות</h3><div class="card">📸 צילום הוכחת מסירה <input type="file" accept="image/*"></div></div>
 
-<div id="t5" class="tab"><h3 style="padding:0 16px">⚙️ הגדרות</h3><div class="card"><b>💬 הודעת וואטסאפ שלך</b><textarea id="msgTemplate" rows="3" onchange="saveMsg()">היי {שם} 🌸 סוס-טוס בדרך אליך עם הפרחים! מגיע בעוד כ-20 דקות. גיא - 052-8671331</textarea><small>{שם} יוחלף בשם הלקוח. נשמר לבד.</small></div><div class="card"><b>🛠️ תיקונים</b><br><br><button onclick="fixPhones()" style="width:100%;background:#25D366;color:#fff;border:0;padding:12px;border-radius:10px;font-weight:800;margin-top:6px">📞 תקן את כל המספרים</button><button onclick="spreadInHarish()" style="width:100%;background:#111;color:#fff;border:0;padding:12px;border-radius:10px;font-weight:800;margin-top:8px">↔️ פזר נקודות על חריש</button></div></div>
+<div id="t5" class="tab"><h3 style="padding:0 16px">⚙️ הגדרות</h3><div class="card"><b>💬 הודעת וואטסאפ שלך</b><textarea id="msgTemplate" rows="3" onchange="saveMsg()">היי {שם} 🌸 סוס-טוס בדרך אליך עם הסחורה! מגיע בעוד כ-20 דקות. גיא - 052-8671331</textarea><small>{שם} יוחלף בשם הלקוח. נשמר לבד.</small></div><div class="card"><b>🛠️ תיקונים</b><br><br><button onclick="fixPhones()" style="width:100%;background:#25D366;color:#fff;border:0;padding:12px;border-radius:10px;font-weight:800;margin-top:6px">📞 תקן את כל המספרים</button><button onclick="spreadInHarish()" style="width:100%;background:#111;color:#fff;border:0;padding:12px;border-radius:10px;font-weight:800;margin-top:8px">↔️ פזר נקודות על חריש</button></div></div>
 
 <div class="nav"><div class="on" onclick="go(1,this)">קו היום</div><div onclick="go(2,this)">הוסף</div><div onclick="go(3,this)">💰 כסף</div><div onclick="go(4,this)">הוכחות</div><div onclick="go(5,this)">⚙️ הגדרות</div></div>
 
 <script>
 (function(){
-  var manifest={name:"סוס-טוס פרחים",short_name:"פרחים",description:"חלוקת פרחים - גיא - חריש",start_url:".",display:"standalone",background_color:"#fdf2f8",theme_color:"#ec4899",orientation:"portrait",lang:"he",dir:"rtl",icons:[{src:"https://cdn-icons-png.flaticon.com/512/12518/12518170.png",sizes:"512x512",type:"image/png",purpose:"any maskable"},{src:"https://cdn-icons-png.flaticon.com/512/12518/12518170.png",sizes:"192x192",type:"image/png",purpose:"any"}]};
-  var blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});var url=URL.createObjectURL(blob);var link=document.createElement('link');link.rel='manifest';link.href=url;document.head.appendChild(link);
-  if('serviceWorker' in navigator){var swCode="self.addEventListener('install',e=>{self.skipWaiting();}); self.addEventListener('activate',e=>{e.waitUntil(self.clients.claim());}); self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));});";var swBlob=new Blob([swCode],{type:'application/javascript'});var swUrl=URL.createObjectURL(swBlob);window.addEventListener('load',function(){navigator.serviceWorker.register(swUrl).catch(function(){});});}
-})();
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBar').style.display='flex';});
-document.getElementById('installBtn').addEventListener('click',async()=>{if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;document.getElementById('installBar').style.display='none';}else{alert('כדי להתקין: 3 נקודות למעלה בכרום > הוסף למסך הבית > פרחים');}});
-
-let parcels=[]; try{let s=localStorage.getItem('sustus_flowers_v2'); if(s) parcels=JSON.parse(s);}catch(e){}
-function saveParcels(){try{localStorage.setItem('sustus_flowers_v2',JSON.stringify(parcels));}catch(e){}}
-const DEFAULT_MSG='היי {שם} 🌸 סוס-טוס בדרך אליך עם הפרחים! מגיע בעוד כ-20 דקות. גיא - 052-8671331';
-function getMsg(name){let t=localStorage.getItem('sustus_flowers_msg')||DEFAULT_MSG; return t.replaceAll('{שם}',name).replaceAll('{name}',name);}
-function saveMsg(){localStorage.setItem('sustus_flowers_msg',document.getElementById('msgTemplate').value);}
-try{let saved=localStorage.getItem('sustus_flowers_msg'); if(saved) document.getElementById('msgTemplate').value=saved;}catch(e){}
-function getPrice(){return parseFloat(localStorage.getItem('sustus_flowers_price')||150);}
-function savePrice(){localStorage.setItem('sustus_flowers_price',document.getElementById('pricePer').value);}
-try{document.getElementById('pricePer').value=getPrice();}catch(e){}
-
-const HARISH={lat:32.45917,lng:35.04278};
-const HARISH_STREETS={'ספיר':{lat:32.4605,lng:35.0455},'גפן':{lat:32.4615,lng:35.0435},'הגפן':{lat:32.4615,lng:35.0435},'דרך ארץ':{lat:32.4595,lng:35.0420},'הרימון':{lat:32.4585,lng:35.0445},'השקד':{lat:32.4600,lng:35.0460},'הזית':{lat:32.4580,lng:35.0430},'האלון':{lat:32.4610,lng:35.0470},'כלנית':{lat:32.4575,lng:35.0450},'הכלנית':{lat:32.4575,lng:35.0450}};
-function getStreetBase(addr){for(let k in HARISH_STREETS){if(addr.includes(k)) return HARISH_STREETS[k];} return HARISH;}
-function fixPhone(raw){if(!raw) return '';let d=String(raw).replace(/\D/g,'');if(d.startsWith('972')) return d;if(d.startsWith('0')) return '972'+d.slice(1);if(d.length===9&&d.startsWith('5')) return '972'+d;if(d.length===10) return '972'+d.slice(1);return d;}
-function displayPhone(raw){let d=String(raw||'').replace(/\D/g,'');if(d.startsWith('972')) d='0'+d.slice(3);if(d.length===10) return d.slice(0,3)+'-'+d.slice(3);return raw||'';}
-function fixPhones(){parcels.forEach(p=>{p.phone=displayPhone(p.phone);});saveParcels();render();alert('✅ תיקנתי את כל המספרים!');}
-function spreadInHarish(){parcels.forEach((p,i)=>{let base=getStreetBase(p.address||'');let numMatch=(p.address||'').match(/(\d+)/);let num=numMatch?parseInt(numMatch[1]):i;p.lat=base.lat+(num%20)*0.0003+(i%3)*0.0002;p.lng=base.lng+Math.floor(num/20)*0.0004+(i%2)*0.0003;p.manual=true;});saveParcels();render();alert('✅ פיזרתי!');}
-
-let map=L.map('map').setView([HARISH.lat,HARISH.lng],15);
-let googleRoad=L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{maxZoom:20,attribution:'© Google Maps'});
-let googleSat=L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{maxZoom:20,attribution:'© Google Maps'});
-let googleHybrid=L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',{maxZoom:20,attribution:'© Google Maps'});
-googleRoad.addTo(map);let currentLayer=googleRoad;
-function setMapType(t){map.removeLayer(currentLayer);document.getElementById('btnRoad').classList.remove('on');document.getElementById('btnSat').classList.remove('on');document.getElementById('btnHybrid').classList.remove('on');if(t==='road'){currentLayer=googleRoad;document.getElementById('btnRoad').classList.add('on');}if(t==='sat'){currentLayer=googleSat;document.getElementById('btnSat').classList.add('on');}if(t==='hybrid'){currentLayer=googleHybrid;document.getElementById('btnHybrid').classList.add('on');}currentLayer.addTo(map);}
-
-let markers=[],line;let fixingIndex=-1;
-function googleMapsLink(s){return 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(s.address+', ישראל');}
-function wazeLink(s){return 'https://waze.com/ul?ll='+s.lat+','+s.lng+'&navigate=yes';}
-function drawMap(){markers.forEach(m=>map.removeLayer(m));markers=[];if(line) map.removeLayer(line);let pts=[];parcels.forEach((s,i)=>{let col=s.done?'#25D366':'#ec4899';let ic=L.divIcon({html:'<div style="background:'+col+';color:#fff;width:30px;height:30px;border-radius:50%;text-align:center;line-height:30px;font-weight:800;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);font-size:13px;cursor:grab">'+(i+1)+'</div>',className:'',iconSize:[30,30]});let m=L.marker([s.lat,s.lng],{icon:ic,draggable:true}).addTo(map);m.on('dragend',function(){let ll=m.getLatLng();s.lat=ll.lat;s.lng=ll.lng;s.manual=true;saveParcels();render();});let waNum=fixPhone(s.phone);m.bindPopup('<b>'+s.name+'</b><br>'+s.address+'<br><a href="tel:+'+waNum+'">📞 התקשר</a> | <a href="https://wa.me/'+waNum+'?text='+encodeURIComponent(getMsg(s.name))+'" target="_blank">💬 וואטסאפ</a>');markers.push(m);pts.push([s.lat,s.lng]);});if(pts.length){line=L.polyline(pts,{color:'#ec4899',weight:4}).addTo(map);}}
-map.on('click',function(e){if(fixingIndex>=0){parcels[fixingIndex].lat=e.latlng.lat;parcels[fixingIndex].lng=e.latlng.lng;parcels[fixingIndex].manual=true;saveParcels();render();alert('✅ '+parcels[fixingIndex].name+' הועבר!');fixingIndex=-1;document.getElementById('fixHint').textContent='';}});
-function setFix(i){fixingIndex=i;document.getElementById('fixHint').textContent='👆 עכשיו לחץ על המפה איפה הבית של '+parcels[i].name;map.setView([HARISH.lat,HARISH.lng],15);}
-function openWaze(){let n=parcels.find(s=>!s.done)||parcels[0];if(!n) return alert('אין פרחים');window.open(wazeLink(n),'_blank');}
-function getHistory(){try{return JSON.parse(localStorage.getItem('sustus_flowers_history')||'{}');}catch(e){return {};}}
-function saveHistory(h){localStorage.setItem('sustus_flowers_history',JSON.stringify(h));}
-function recordDone(){let today=new Date().toISOString().slice(0,10);let h=getHistory();h[today]=parcels.filter(p=>p.done).length;saveHistory(h);}
-function buildDailyText(){let price=getPrice();let t=parcels.length,d=parcels.filter(p=>p.done).length;let date=new Date().toLocaleDateString('he-IL');return '🌸 דו"ח פרחים יומי - סוס-טוס\n📅 תאריך: '+date+'\n👤 גיא - 052-8671331\n\n📦 סה"כ הזמנות: '+t+'\n✅ נמסרו: '+d+'\n⏳ נשארו: '+(t-d)+'\n💰 מחיר לזר: '+price+'₪\n💰 סה"כ היום: '+(d*price)+'₪\n\n'+parcels.map((p,i)=>(i+1)+'. '+p.name+' - '+p.address+' '+(p.done?'✅':'⏳')).join('\n');}
-function buildMonthlyText(){let h=getHistory();let now=new Date();let ym=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');let total=0,days=0;for(let k in h){if(k.startsWith(ym)){total+=h[k];days++;}}let price=getPrice();return '🌸 דו"ח פרחים חודשי - סוס-טוס\n📅 חודש: '+(now.getMonth()+1)+'/'+now.getFullYear()+'\n👤 גיא - 052-8671331\n\n📦 סה"כ נמסרו החודש: '+total+'\n📅 ימי עבודה: '+days+'\n💰 מחיר לזר: '+price+'₪\n💰 סה"כ החודש: '+(total*price)+'₪';}
-function sendDailyReport(){recordDone();let txt=buildDailyText();window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');}
-function sendMonthlyReport(){let txt=buildMonthlyText();window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');}
-function copyDailyReport(){recordDone();navigator.clipboard.writeText(buildDailyText()).then(()=>alert('✅ הועתק! תדביק בוואטסאפ')).catch(()=>alert(buildDailyText()));}
-function addSingle(){let n=document.getElementById('oneName').value.trim(),a=document.getElementById('oneAddr').value.trim(),p=document.getElementById('onePhone').value.trim(),f=document.getElementById('oneFlower').value;if(!n||!a) return alert('צריך שם וכתובת');let base=getStreetBase(a);parcels.push({type:f,name:n,address:a,phone:displayPhone(p),lat:base.lat+Math.random()*0.002,lng:base.lng+Math.random()*0.002,done:false});saveParcels();render();go(1,document.querySelectorAll('.nav div')[0]);}
-function bulkAdd(){let txt=document.getElementById('bulkText').value.trim();if(!txt) return alert('הדבק רשימה');let lines=txt.split('\n').filter(l=>l.trim());lines.forEach(l=>{let parts=l.split('|').map(x=>x.trim());let base=getStreetBase(parts[1]||'');parcels.push({type:'זר פרחים 🌹',name:parts[0]||'פרחים',address:parts[1]||'',phone:displayPhone(parts[2]||''),lat:base.lat+Math.random()*0.003,lng:base.lng+Math.random()*0.003,done:false});});saveParcels();document.getElementById('bulkText').value='';render();go(1,document.querySelectorAll('.nav div')[0]);}
-function clearDay(){if(confirm('למחוק את כל היום?')){recordDone();parcels=[];saveParcels();render();}}
-function render(){
-  saveParcels();let t=parcels.length,d=parcels.filter(s=>s.done).length;
-  document.getElementById('sTotal').textContent=t;document.getElementById('sDone').textContent=d;document.getElementById('sLeft').textContent=t-d;document.getElementById('progBar').style.width=t?(d/t*100)+'%':'0%';
-  let price=getPrice();let today=new Date().toLocaleDateString('he-IL');document.getElementById('todayDate').textContent=today;document.getElementById('monthName').textContent=(new Date().getMonth()+1)+'/'+new Date().getFullYear();
-  document.getElementById('moneyToday').textContent=(d*price)+'₪';document.getElementById('moneyTodayDetail').textContent=d+' נמסרו × '+price+'₪';
-  let h=getHistory();let now=new Date();let ym=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');let mTotal=0;for(let k in h){if(k.startsWith(ym)) mTotal+=h[k];}
-  // מוסיף את היום הנוכחי לחודשי
-  let todayKey=now.toISOString().slice(0,10);let todayInHistory=h[todayKey]||0;let monthWithToday=mTotal;if(!h[todayKey]||h[todayKey]!==d){monthWithToday=mTotal-todayInHistory+d;}
-  document.getElementById('moneyMonth').textContent=(monthWithToday*price)+'₪';document.getElementById('moneyMonthDetail').textContent=monthWithToday+' נמסרו החודש × '+price+'₪';
-  let hl=document.getElementById('historyList');hl.innerHTML='';let keys=Object.keys(h).sort().reverse().slice(0,7);if(!keys.length) hl.innerHTML='אין היסטוריה עדיין';keys.forEach(k=>{hl.innerHTML+='<div>'+k+' - '+h[k]+' נמסרו - '+(h[k]*price)+'₪</div>';});
-  let el=document.getElementById('stopsList');el.innerHTML='';if(!t) el.innerHTML='<div class="card" style="text-align:center">אין פרחים - הוסף בלשונית "הוסף"</div>';
-  parcels.forEach((s,i)=>{
-    let waNum=fixPhone(s.phone);let disp=displayPhone(s.phone);
-    el.innerHTML+='<div class="card" style="'+(s.done?'background:#f0fff4':'')+'"><b>'+(i+1)+'. '+s.name+'</b> '+(s.done?'✅ נמסר':'')+'<br><small>'+(s.type||'')+' | '+s.address+' | 📞 '+disp+'</small>'
-    +'<div class="move"><button onclick="moveUp('+i+')">🔼 למעלה</button><button onclick="moveDown('+i+')">🔽 למטה</button></div>'
-    +'<a href="tel:+'+waNum+'" class="callBtn">📞 התקשר ל'+s.name+' - '+disp+'</a>'
-    +'<a href="https://wa.me/'+waNum+'?text='+encodeURIComponent(getMsg(s.name))+'" target="_blank" class="wa">📲 אני בדרך - וואטסאפ ל'+s.name+'</a>'
-    +'<div class="navBtns"><a href="'+googleMapsLink(s)+'" target="_blank" style="background:#4285F4">🗺️ גוגל מפות</a><a href="'+wazeLink(s)+'" target="_blank" style="background:#33ccff">🚗 Waze</a></div>'
-    +'<button onclick="setFix('+i+')" style="width:100%;margin-top:8px;padding:10px;border-radius:10px;border:1px solid #ddd;background:#fff;font-weight:700">📍 תקן במפה</button>'
-    +'<div class="btns"><button class="b1" onclick="markDone('+i+')">'+(s.done?'↩ בטל':'✅ נמסר')+'</button><button class="b2" onclick="focusStop('+i+')">📍 במפה</button><button onclick="delItem('+i+')" style="background:#ffe6e6;border:0;padding:9px 12px;border-radius:10px">🗑</button></div></div>';
-  });
-  drawMap();
-}
-function focusStop(i){map.setView([parcels[i].lat,parcels[i].lng],17);if(markers[i]) markers[i].openPopup();}
-function markDone(i){parcels[i].done=!parcels[i].done;recordDone();render();}
-function moveUp(i){if(i===0) return;let tmp=parcels[i];parcels[i]=parcels[i-1];parcels[i-1]=tmp;render();}
-function moveDown(i){if(i===parcels.length-1) return;let tmp=parcels[i];parcels[i]=parcels[i+1];parcels[i+1]=tmp;render();}
-function delItem(i){if(confirm('למחוק?')){parcels.splice(i,1);render();}}
-function go(n,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.getElementById('t'+n).classList.add('on');document.querySelectorAll('.nav div').forEach(d=>d.classList.remove('on'));el.classList.add('on');setTimeout(()=>map.invalidateSize(),200);}
-render();
-</script>
-</body></html>
+  var manifest={name:"סוס-טוס פרחים",short_name:"פרחים",description:"חלוקת סחורת פרחים - גיא - חריש",start_url:".",display:"standalone",background_color:"#fdf2f8",theme_color:"#ec4899",orientation:"portrait",lang:"he",dir:"rtl",icons:[{src:"logo.jpg",sizes:"512x512",type:"image/jpeg",purpose:"any maskable"},{src:"logo.jpg",sizes
